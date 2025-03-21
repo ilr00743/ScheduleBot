@@ -13,6 +13,7 @@ riderModule.iml
 **/.idea/shelf/*
 **/.idea/dictionaries
 **/.idea/httpRequests/
+**/.idea/.idea.PIBScheduleBot/
 
 # Sensitive or high-churn files
 **/.idea/**/dataSources/

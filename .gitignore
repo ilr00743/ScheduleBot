@@ -37,6 +37,9 @@ riderModule.iml
 _UpgradeReport_Files/
 [Pp]ackages/
 
+gitignore
+gitignore.meta
+
 Thumbs.db
 Desktop.ini
 .DS_Store

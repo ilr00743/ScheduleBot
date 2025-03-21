@@ -1,21 +1,9 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:9.0 AS base
-USER $APP_UID
+﻿# Використовуємо офіційний образ .NET 8 для запуску
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["PIBScheduleBot/PIBScheduleBot.csproj", "PIBScheduleBot/"]
-RUN dotnet restore "PIBScheduleBot/PIBScheduleBot.csproj"
-COPY . .
-WORKDIR "/src/PIBScheduleBot"
-RUN dotnet build "PIBScheduleBot.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# Копіюємо збудовані файли з попереднього етапу
+COPY bin/Release/net9.0 /app
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "PIBScheduleBot.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "PIBScheduleBot.dll"]
+# Запускаємо бота
+CMD ["dotnet", "PIBScheduleBot.dll"]

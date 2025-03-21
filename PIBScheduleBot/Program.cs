@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using PIBScheduleBot;
+﻿using PIBScheduleBot;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-var bot = new TelegramBotClient("7419682936:AAGpoDg44FjYsbBkRZhY7wlF_67A-JYGhDc");
+var bot = new TelegramBotClient(Environment.GetEnvironmentVariable("BOT_TOKEN"));
 var me = await bot.GetMe();
 
 var markupDrawer = new MarkupDrawer();

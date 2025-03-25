@@ -3,4 +3,4 @@ WORKDIR /app
 
 COPY bin/Release/net9.0 /app
 
-CMD ["dotnet", "PIBScheduleBot.dll"]
+CMD ["dotnet", "Bot.dll"]

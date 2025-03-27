@@ -1,11 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PIBScheduleBot;
+using PIBScheduleBot.ApiClients;
 using PIBScheduleBot.Services;
 using Telegram.Bot;
 
 var builder = Host.CreateDefaultBuilder()
-    .ConfigureServices((services) =>
+    .ConfigureAppConfiguration((config) =>
+    {
+        config.SetBasePath(Directory.GetCurrentDirectory());
+        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        config.AddEnvironmentVariables();
+    })
+    .ConfigureServices((context, services) =>
     {
         var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN");
 
@@ -14,12 +22,13 @@ var builder = Host.CreateDefaultBuilder()
             throw new InvalidOperationException("Bot token is not set!");
         }
         
-        Console.WriteLine($"BotToken: {botToken}");
-        
         services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botToken));
         services.AddSingleton<MarkupDrawer>();
         services.AddSingleton<UpdateHandler>();
         services.AddHostedService<BotBackgroundService>();
+        
+        services.AddHttpClient<UserApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+
     });
 
 var host = builder.Build();

@@ -1,0 +1,80 @@
+using Core.Entities;
+using DataBaseApi.Persistence;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace DataBaseApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TeachersController : ControllerBase
+{
+    private readonly AppDbContext _context;
+
+    public TeachersController(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
+    {
+        return await _context.Teachers.ToListAsync();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Teacher>> GetTeacherById(int id)
+    {
+        var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Id == id);
+
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(teacher);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<Teacher>> CreateTeacher([FromBody] Teacher teacher)
+    {
+        _context.Teachers.Add(teacher);
+        
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetTeacherById), new { id = teacher.Id }, teacher);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTeacher(int id, [FromBody] Teacher updatedTeacher)
+    {
+        var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Id == id);
+
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+        
+        teacher.FullName = updatedTeacher.FullName;
+        teacher.DepartmentId = updatedTeacher.DepartmentId;
+        
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTeacher(int id)
+    {
+        var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.Id == id);
+
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+        
+        _context.Teachers.Remove(teacher);
+        
+        await _context.SaveChangesAsync();
+        
+        return NoContent();
+    }
+}

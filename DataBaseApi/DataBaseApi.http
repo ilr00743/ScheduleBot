@@ -1,6 +1,24 @@
 @DataBaseApi_HostAddress = http://localhost:5116
 
-GET {{DataBaseApi_HostAddress}}/weatherforecast/
+
+GET {{DataBaseApi_HostAddress}}/api/users/
 Accept: application/json
 
 ###
+POST {{DataBaseApi_HostAddress}}/api/users   
+Content-Type:application/json
+
+{
+    "TelegramId":"9345297",
+    "UserName":"boba",
+    "Status":0
+}
+
+###
+
+GET{{DataBaseApi_HostAddress}}/api/User/2
+Accept: application/json
+
+###
+GET{{DataBaseApi_HostAddress}}/api/User/telegram/9345297
+Accept: application/json

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace PIBScheduleBot;
@@ -31,11 +32,16 @@ public class MarkupDrawer
         return markup;
     }
 
-    public ReplyKeyboardMarkup DrawMarkupWithSize<T>(int buttonsPerRow)
+    public ReplyKeyboardMarkup DrawCustomMarkup<T>(int buttonsPerRow, List<T>? entities, bool hasMainMenuButton = true)
     {
-        var entities = new List<int>{1,2,3,4,5,6,7,8,9,10,11};
         var markup = new ReplyKeyboardMarkup { ResizeKeyboard = true };
 
+        if (entities == null || entities.Count == 0)
+        {
+            Console.WriteLine("[MarkupDrawer] No entities provided.]");
+            return markup;
+        }
+        
         for (int i = 0; i < entities.Count; i += buttonsPerRow)
         {
             var row = entities.Skip(i).Take(buttonsPerRow)
@@ -45,7 +51,10 @@ public class MarkupDrawer
             markup.AddNewRow(row);
         }
 
-        markup.AddNewRow(new KeyboardButton("Головне меню"));
+        if (hasMainMenuButton)
+        {
+            markup.AddNewRow(new KeyboardButton("Головне меню"));
+        }
 
         return markup;
     }

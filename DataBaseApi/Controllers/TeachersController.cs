@@ -19,8 +19,37 @@ public class TeachersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachers()
     {
-        return await _context.Teachers.ToListAsync();
+        var teachers = await _context.Teachers.ToListAsync();
+        return Ok(teachers);
     }
+
+    [HttpGet("by-name")]
+    public async Task<ActionResult<Teacher>> GetTeacherByFullName([FromQuery] string fullName)
+    {
+        var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.FullName == fullName);
+
+        if (teacher == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(teacher);
+    }
+
+    [HttpGet("by-department/{departmentId}")]
+    public async Task<ActionResult<IEnumerable<Teacher>>> GetTeachersByDepartment(int departmentId)
+    {
+        var teachers = await _context.Teachers
+            .Where(t => t.DepartmentId == departmentId).ToListAsync();
+
+        if (teachers.Count == 0)
+        {
+            return NotFound();
+        }
+        
+        return Ok(teachers);
+    }
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Teacher>> GetTeacherById(int id)

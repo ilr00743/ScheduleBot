@@ -1,6 +1,6 @@
 using Core.Entities;
 
-namespace DataBaseApi.DTO;
+namespace Core.DTO;
 
 public class UpdateUserStatusRequest
 {

@@ -6,4 +6,9 @@ public class Department
     public required string Name { get; set; }
 
     public List<Teacher>? Teachers { get; set; }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

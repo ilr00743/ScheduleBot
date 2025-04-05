@@ -6,5 +6,9 @@ public class Teacher
     public required string FullName { get; set; }
     
     public int? DepartmentId { get; set; }
-    public Department? Department { get; set; }
+
+    public override string ToString()
+    {
+        return FullName;
+    }
 }

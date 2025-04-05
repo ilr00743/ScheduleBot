@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Auditorium> Auditoriums { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
+    public DbSet<Course> Courses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,6 +32,9 @@ public class AppDbContext : DbContext
             .HasForeignKey<User>(u => u.TeacherId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<User>()
+            .Property(u => u.Status).HasConversion<string>();
+
         modelBuilder.Entity<Group>()
             .HasOne(g => g.Course)
             .WithMany(c => c.Groups)
@@ -38,7 +42,7 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Teacher>()
-            .HasOne(t => t.Department)
+            .HasOne<Department>()
             .WithMany(d => d.Teachers)
             .HasForeignKey(t => t.DepartmentId)
             .OnDelete(DeleteBehavior.SetNull);

@@ -1,4 +1,4 @@
-namespace DataBaseApi.DTO;
+namespace Core.DTO;
 
 public class UpdateUserGroupRequest
 {

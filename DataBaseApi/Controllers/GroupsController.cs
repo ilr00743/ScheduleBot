@@ -17,9 +17,24 @@ public class GroupsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
+    public async Task<ActionResult<IEnumerable<Group>>> GetGroups([FromQuery] int? courseId)
     {
-        return await _context.Groups.ToListAsync();
+        var query = _context.Groups
+            .Include(g => g.Course)
+            .AsQueryable();
+
+        if (courseId.HasValue)
+        {
+            query = query.Where(g => g.Course.Id == courseId.Value);
+        }
+        
+        var groups = await query.ToListAsync();
+        
+        if (groups.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(groups);
     }
 
     [HttpGet("{id}")]
@@ -34,9 +49,22 @@ public class GroupsController : ControllerBase
         
         return Ok(group);
     }
+    
+    [HttpGet("by-number/{number}")]
+    public async Task<ActionResult<Group>> GetGroupByNumber(int number)
+    {
+        var group = await _context.Groups.Include(g => g.Course).FirstOrDefaultAsync(g => g.Number == number);
+
+        if (group == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(group);
+    }
 
     [HttpPost]
-    public async Task<ActionResult<Group>> PostGroup([FromBody] Group group)
+    public async Task<ActionResult<Group>> CreateGroup([FromBody] Group group)
     {
         if (await _context.Groups.AnyAsync(g => g.Id == group.Id))
         {
@@ -49,9 +77,9 @@ public class GroupsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<Group>> PutGroup(int id, [FromBody] Group updatedGroup)
+    public async Task<ActionResult<Group>> UpdateGroup(int id, [FromBody] Group updatedGroup)
     {
-        var group = await _context.Groups.FirstOrDefaultAsync(g => g.Id == id);
+        var group = await _context.Groups.FindAsync(id);
 
         if (group == null)
         {

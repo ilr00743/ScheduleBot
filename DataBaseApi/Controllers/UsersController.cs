@@ -1,5 +1,5 @@
+using Core.DTO;
 using Core.Entities;
-using DataBaseApi.DTO;
 using DataBaseApi.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataBaseApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/users")]
 public class UsersController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -121,6 +121,23 @@ public class UsersController : ControllerBase
         
         user.TeacherId = teacher.Id;
 
+        await _context.SaveChangesAsync();
+        
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(int id)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        
+        if (user == null)
+        {
+            return NotFound();
+        }
+        
+        _context.Users.Remove(user);
+        
         await _context.SaveChangesAsync();
         
         return NoContent();

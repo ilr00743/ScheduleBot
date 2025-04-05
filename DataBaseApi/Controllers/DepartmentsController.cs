@@ -19,7 +19,20 @@ public class DepartmentsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
     {
-        return await _context.Departments.ToListAsync();
+        return Ok(await _context.Departments.ToListAsync());
+    }
+
+    [HttpGet("by-name/{name}")]
+    public async Task<ActionResult<Department>> GetDepartmentByName(string name)
+    {
+        var department = await _context.Departments.FirstOrDefaultAsync(x => x.Name == name);
+
+        if (department == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(department);
     }
 
     [HttpGet("{id}")]

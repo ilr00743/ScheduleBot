@@ -19,7 +19,7 @@ public class DisciplinesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Discipline>>> GetDisciplines()
     {
-        return await _context.Disciplines.ToListAsync();
+        return Ok(await _context.Disciplines.ToListAsync());
     }
 
     [HttpGet("{id}")]

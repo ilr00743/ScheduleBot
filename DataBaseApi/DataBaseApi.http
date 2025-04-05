@@ -22,3 +22,25 @@ Accept: application/json
 ###
 GET{{DataBaseApi_HostAddress}}/api/User/telegram/9345297
 Accept: application/json
+
+###
+
+DELETE {{DataBaseApi_HostAddress}}/api/users/9
+
+###
+
+GET {{DataBaseApi_HostAddress}}/api/courses
+Accept:application/json
+###
+
+POST {{DataBaseApi_HostAddress}}/api/courses
+Content-Type:application/json
+
+{
+    "Number":5
+}
+
+###
+
+GET {{DataBaseApi_HostAddress}}/api/Teachers/by-name?fullName=Савченко%20Анна%20Олександрівна
+Accept:application/json

@@ -27,6 +27,36 @@ public class LessonsController : ControllerBase
             .ToListAsync();
     }
 
+    [HttpGet]
+    public async Task<ActionResult<Lesson>> GetLessons([FromQuery] int? groupId, [FromQuery] int? teacherId, [FromQuery] DayOfWeek? day)
+    {
+        var query = _context.Lessons
+            .Include(l => l.Group)
+            .Include(l => l.Discipline)
+            .Include(l => l.Teacher)
+            .Include(l => l.Auditorium)
+            .AsQueryable();
+
+        if (groupId.HasValue)
+        {
+            query = query.Where(l => l.GroupId == groupId.Value);
+        }
+
+        if (teacherId.HasValue)
+        {
+            query = query.Where(l => l.TeacherId == teacherId.Value);
+        }
+
+        if (day.HasValue)
+        {
+            query = query.Where(l => l.Day.ToString() == day.Value.ToString());
+        }
+        
+        var lessons = await query.ToListAsync();
+        
+        return Ok(lessons);
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Lesson>> GetLessonById(int id)
     {
@@ -42,7 +72,7 @@ public class LessonsController : ControllerBase
             return NotFound();
         }
         
-        return lesson;
+        return Ok(lesson);
     }
     
     [HttpPost]

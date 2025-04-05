@@ -19,7 +19,7 @@ public class AuditoriumsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Auditorium>>> GetAuditoriums()
     {
-        return await _context.Auditoriums.ToListAsync();
+        return Ok(await _context.Auditoriums.ToListAsync());
     }
 
     [HttpGet("{id}")]

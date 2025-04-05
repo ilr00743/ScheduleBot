@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataBaseApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/lessons")]
 public class LessonsController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -17,18 +17,7 @@ public class LessonsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons()
-    {
-        return await _context.Lessons
-            .Include(l => l.Discipline)
-            .Include(l => l.Group)
-            .Include(l => l.Teacher)
-            .Include(l => l.Auditorium)
-            .ToListAsync();
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<Lesson>> GetLessons([FromQuery] int? groupId, [FromQuery] int? teacherId, [FromQuery] DayOfWeek? day)
+    public async Task<ActionResult<Lesson>> GetLessons([FromQuery] int? groupId, [FromQuery] int? teacherId, [FromQuery] int? dayId)
     {
         var query = _context.Lessons
             .Include(l => l.Group)
@@ -47,12 +36,17 @@ public class LessonsController : ControllerBase
             query = query.Where(l => l.TeacherId == teacherId.Value);
         }
 
-        if (day.HasValue)
+        if (dayId.HasValue)
         {
-            query = query.Where(l => l.Day.ToString() == day.Value.ToString());
+            query = query.Where(l => l.DayId == dayId.Value);
         }
         
         var lessons = await query.ToListAsync();
+
+        if (lessons.Count == 0)
+        {
+            return NotFound();
+        }
         
         return Ok(lessons);
     }

@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<Department> Departments { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<Course> Courses { get; set; }
+    public DbSet<WeekDay> Days { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -71,8 +72,21 @@ public class AppDbContext : DbContext
                 .HasForeignKey(l => l.AuditoriumId)
                 .OnDelete(DeleteBehavior.Restrict);
             
-            entity.Property(l => l.Day)
-                .HasConversion<string>();
+            entity.HasOne(l => l.Day)
+                .WithMany()
+                .HasForeignKey(l => l.DayId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<WeekDay>()
+            .HasData(
+                new WeekDay { Id = 1, Name = "Понеділок", CodeAlias = (int)DayOfWeek.Monday },
+                new WeekDay {Id = 2, Name = "Вівторок", CodeAlias = (int)DayOfWeek.Tuesday},
+                new WeekDay {Id = 3, Name = "Середа", CodeAlias = (int)DayOfWeek.Wednesday},
+                new WeekDay {Id = 4, Name = "Четвер", CodeAlias = (int)DayOfWeek.Thursday},
+                new WeekDay {Id = 5, Name = "П'ятниця", CodeAlias = (int)DayOfWeek.Friday},
+                new WeekDay {Id = 6, Name = "Субота", CodeAlias = (int)DayOfWeek.Saturday},
+                new WeekDay {Id = 7, Name = "Неділя", CodeAlias = (int)DayOfWeek.Sunday}
+            );
     }
 }

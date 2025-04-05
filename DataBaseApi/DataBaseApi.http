@@ -44,3 +44,7 @@ Content-Type:application/json
 
 GET {{DataBaseApi_HostAddress}}/api/Teachers/by-name?fullName=Савченко%20Анна%20Олександрівна
 Accept:application/json
+
+###
+
+GET {{DataBaseApi_HostAddress}}/api/lessons?dayId=6

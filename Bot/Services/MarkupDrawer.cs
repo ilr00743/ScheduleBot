@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using Microsoft.Extensions.Logging;
-using Telegram.Bot.Types.ReplyMarkups;
+﻿using Telegram.Bot.Types.ReplyMarkups;
 
-namespace PIBScheduleBot;
+namespace Bot.Services;
 
 public class MarkupDrawer
 {

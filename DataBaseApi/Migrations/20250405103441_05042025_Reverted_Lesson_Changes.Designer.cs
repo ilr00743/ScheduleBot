@@ -2,6 +2,7 @@
 using DataBaseApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBaseApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250405103441_05042025_Reverted_Lesson_Changes")]
+    partial class _05042025_Reverted_Lesson_Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -102,13 +105,25 @@ namespace DataBaseApi.Migrations
                     b.Property<int>("AuditoriumId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AuditoriumId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("DayId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("DayId1")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("DisciplineId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("DisciplineId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("GroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("GroupId1")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Number")
@@ -117,17 +132,30 @@ namespace DataBaseApi.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("TeacherId1")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuditoriumId");
 
+                    b.HasIndex("AuditoriumId1");
+
                     b.HasIndex("DayId");
+
+                    b.HasIndex("DayId1");
 
                     b.HasIndex("DisciplineId");
 
+                    b.HasIndex("DisciplineId1");
+
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("GroupId1");
+
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("TeacherId1");
 
                     b.ToTable("Lessons");
                 });
@@ -260,35 +288,55 @@ namespace DataBaseApi.Migrations
 
             modelBuilder.Entity("Core.Entities.Lesson", b =>
                 {
-                    b.HasOne("Core.Entities.Auditorium", "Auditorium")
+                    b.HasOne("Core.Entities.Auditorium", null)
                         .WithMany()
                         .HasForeignKey("AuditoriumId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.WeekDay", "Day")
+                    b.HasOne("Core.Entities.Auditorium", "Auditorium")
+                        .WithMany()
+                        .HasForeignKey("AuditoriumId1");
+
+                    b.HasOne("Core.Entities.WeekDay", null)
                         .WithMany()
                         .HasForeignKey("DayId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Discipline", "Discipline")
+                    b.HasOne("Core.Entities.WeekDay", "Day")
+                        .WithMany()
+                        .HasForeignKey("DayId1");
+
+                    b.HasOne("Core.Entities.Discipline", null)
                         .WithMany()
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Group", "Group")
+                    b.HasOne("Core.Entities.Discipline", "Discipline")
+                        .WithMany()
+                        .HasForeignKey("DisciplineId1");
+
+                    b.HasOne("Core.Entities.Group", null)
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Teacher", "Teacher")
+                    b.HasOne("Core.Entities.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId1");
+
+                    b.HasOne("Core.Entities.Teacher", null)
                         .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Core.Entities.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId1");
 
                     b.Navigation("Auditorium");
 

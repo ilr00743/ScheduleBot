@@ -2,6 +2,7 @@
 using DataBaseApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBaseApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250405091147_05042025_Override_WeekDay_ToString")]
+    partial class _05042025_Override_WeekDay_ToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -260,45 +263,35 @@ namespace DataBaseApi.Migrations
 
             modelBuilder.Entity("Core.Entities.Lesson", b =>
                 {
-                    b.HasOne("Core.Entities.Auditorium", "Auditorium")
+                    b.HasOne("Core.Entities.Auditorium", null)
                         .WithMany()
                         .HasForeignKey("AuditoriumId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.WeekDay", "Day")
+                    b.HasOne("Core.Entities.WeekDay", null)
                         .WithMany()
                         .HasForeignKey("DayId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Discipline", "Discipline")
+                    b.HasOne("Core.Entities.Discipline", null)
                         .WithMany()
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Group", "Group")
+                    b.HasOne("Core.Entities.Group", null)
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Teacher", "Teacher")
+                    b.HasOne("Core.Entities.Teacher", null)
                         .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Auditorium");
-
-                    b.Navigation("Day");
-
-                    b.Navigation("Discipline");
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Core.Entities.Teacher", b =>

@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Bot.ApiClients;
+using Bot.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PIBScheduleBot;
-using PIBScheduleBot.ApiClients;
-using PIBScheduleBot.Services;
 using Telegram.Bot;
 
 var builder = Host.CreateDefaultBuilder()
@@ -34,6 +33,12 @@ var builder = Host.CreateDefaultBuilder()
         services.AddHttpClient<GroupApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
         services.AddHttpClient<DepartmentApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
         services.AddHttpClient<TeacherApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<DayApiClient>(client =>
+            client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ??
+                                         throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<LessonApiClient>(client =>
+            client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ??
+                                         throw new ArgumentNullException("ApiKey URL is missing in configuration")));
 
     });
 

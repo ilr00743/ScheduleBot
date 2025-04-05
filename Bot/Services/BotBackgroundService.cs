@@ -3,7 +3,7 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 
-namespace PIBScheduleBot.Services;
+namespace Bot.Services;
 
 public class BotBackgroundService : BackgroundService
 {

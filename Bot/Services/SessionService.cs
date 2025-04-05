@@ -1,6 +1,6 @@
 using Core.Entities;
 
-namespace PIBScheduleBot.Services;
+namespace Bot.Services;
 
 public class SessionService
 {

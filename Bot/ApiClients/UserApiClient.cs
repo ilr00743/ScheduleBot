@@ -4,7 +4,7 @@ using Core.DTO;
 using Core.Entities;
 using Microsoft.Extensions.Configuration;
 
-namespace PIBScheduleBot.ApiClients;
+namespace Bot.ApiClients;
 
 public class UserApiClient
 {

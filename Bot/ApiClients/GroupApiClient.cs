@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Core.Entities;
 
-namespace PIBScheduleBot.ApiClients;
+namespace Bot.ApiClients;
 
 public class GroupApiClient
 {

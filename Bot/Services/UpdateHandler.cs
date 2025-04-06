@@ -20,6 +20,7 @@ public class UpdateHandler : IUpdateHandler
     private readonly TeacherApiClient _teacherApiClient;
     private readonly DayApiClient _dayApiClient;
     private readonly LessonApiClient _lessonApiClient;
+    
     public UpdateHandler(MarkupDrawer markupDrawer,
         SessionService sessionService,
         UserApiClient userApiClient,
@@ -48,8 +49,7 @@ public class UpdateHandler : IUpdateHandler
         {
             return;
         }
-
-        var message = update.Message.Text;
+        
         var userId = update.Message.From.Id;
         var session = _sessionService.GetSession(userId.ToString());
         
@@ -160,22 +160,23 @@ public class UpdateHandler : IUpdateHandler
                 break;
             
             case "\ud83d\udccb Розклад на сьогодні":
-                // await SendScheduleForToday(botClient, update, session, cancellationToken);
                 var currentDay = await GetCurrentDay();
-                await SendScheduleForDay(botClient, currentDay, update, cancellationToken);
+                
+                await SendScheduleForDay(botClient, currentDay.Item1, update, cancellationToken);
                 break;
             
             case "\ud83d\udccb Розклад на наступний день":
-                // await SendScheduleForTomorrow(botClient, update, session, cancellationToken);
                 var nextDay = await GetNextDay();
-                await SendScheduleForDay(botClient, nextDay, update, cancellationToken);
+                
+                await SendScheduleForDay(botClient, nextDay.Item1, update, cancellationToken);
                 break;            
             
             case "\u26a0\ufe0f Зміни на наступний день":
+                await SendScheduleChangesForDay(botClient, update, cancellationToken);
                 break;
             
             case "\u26a0\ufe0f Зміни на сьогодні":
-                Console.WriteLine("Зміни на сьогодні");
+                await SendScheduleChangesForDay(botClient, update, cancellationToken);
                 break;
         }
     }
@@ -317,32 +318,6 @@ public class UpdateHandler : IUpdateHandler
         await botClient.SendMessage(chatId: update.Message.Chat.Id, text: constructedSchedule.ToString(), cancellationToken: cancellationToken, parseMode: ParseMode.Html);
     }
     
-    private async Task<WeekDay> GetCurrentDay()
-    {
-        var days = await _dayApiClient.GetDays();
-        
-        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Kyiv");
-        
-        var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
-
-        var currentDayId = (int)time.DayOfWeek;
-
-        return days.FirstOrDefault(d => d.CodeAlias == currentDayId);
-    }
-
-    private async Task<WeekDay> GetNextDay()
-    {
-        var days = await _dayApiClient.GetDays();
-        
-        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Kyiv");
-        
-        var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(1), timeZone);
-
-        var nextDayId = (int)time.DayOfWeek;
-
-        return days.FirstOrDefault(d => d.CodeAlias == nextDayId);
-    }
-
     private async Task SendStatusSettings(ITelegramBotClient botClient, Update update)
     {
         await botClient.SendMessage(chatId:update.Message.Chat.Id, text: "Оберіть, хто ви:", replyMarkup: _markupDrawer.DrawStatusSettings());
@@ -653,5 +628,36 @@ public class UpdateHandler : IUpdateHandler
 
         await botClient.SendMessage(chatId: update.Message.Chat.Id, text: "Оберіть день тижня:",
             replyMarkup: _markupDrawer.DrawCustomMarkup(buttonsPerRow: 3, days), cancellationToken: cancellationToken);
+    }
+
+    private async Task SendScheduleChangesForDay(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        
+    }
+    
+    private async Task<(WeekDay,DateTimeOffset?)> GetCurrentDay()
+    {
+        var days = await _dayApiClient.GetDays();
+        
+        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Kyiv");
+        
+        var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+
+        var currentDayId = (int)time.DayOfWeek;
+
+        return (days.FirstOrDefault(d => d.CodeAlias == currentDayId), time.Date);
+    }
+
+    private async Task<(WeekDay,DateTimeOffset?)> GetNextDay()
+    {
+        var days = await _dayApiClient.GetDays();
+        
+        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Kyiv");
+        
+        var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(1), timeZone);
+
+        var nextDayId = (int)time.DayOfWeek;
+
+        return (days.FirstOrDefault(d => d.CodeAlias == nextDayId), time.Date);
     }
 }

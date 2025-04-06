@@ -22,22 +22,22 @@ var builder = Host.CreateDefaultBuilder()
         }
         
         services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(botToken));
-        services.AddSingleton<MarkupDrawer>();
-        services.AddSingleton<UpdateHandler>();
-        services.AddSingleton<SessionService>();
+        services.AddScoped<MarkupDrawer>();
+        services.AddScoped<UpdateHandler>();
+        services.AddScoped<SessionService>();
         
         services.AddHostedService<BotBackgroundService>();
         
-        services.AddHttpClient<UserApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-        services.AddHttpClient<CourseApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-        services.AddHttpClient<GroupApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-        services.AddHttpClient<DepartmentApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-        services.AddHttpClient<TeacherApiClient>(client => client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<UserApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<CourseApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<GroupApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<DepartmentApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<TeacherApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
         services.AddHttpClient<DayApiClient>(client =>
-            client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ??
+            client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ??
                                          throw new ArgumentNullException("ApiKey URL is missing in configuration")));
         services.AddHttpClient<LessonApiClient>(client =>
-            client.BaseAddress = new Uri("https://advanced-ant-apparent.ngrok-free.app/" ??
+            client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ??
                                          throw new ArgumentNullException("ApiKey URL is missing in configuration")));
 
     });

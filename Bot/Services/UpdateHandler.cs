@@ -635,7 +635,7 @@ public class UpdateHandler : IUpdateHandler
         
     }
     
-    private async Task<(WeekDay,DateTimeOffset?)> GetCurrentDay()
+    private async Task<(WeekDay,DateOnly?)> GetCurrentDay()
     {
         var days = await _dayApiClient.GetDays();
         
@@ -644,11 +644,13 @@ public class UpdateHandler : IUpdateHandler
         var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
 
         var currentDayId = (int)time.DayOfWeek;
+        
+        var date = DateOnly.FromDateTime(time);
 
-        return (days.FirstOrDefault(d => d.CodeAlias == currentDayId), time.Date);
+        return (days.FirstOrDefault(d => d.CodeAlias == currentDayId), date);
     }
 
-    private async Task<(WeekDay,DateTimeOffset?)> GetNextDay()
+    private async Task<(WeekDay,DateOnly?)> GetNextDay()
     {
         var days = await _dayApiClient.GetDays();
         
@@ -657,7 +659,9 @@ public class UpdateHandler : IUpdateHandler
         var time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(1), timeZone);
 
         var nextDayId = (int)time.DayOfWeek;
+        
+        var date = DateOnly.FromDateTime(time);
 
-        return (days.FirstOrDefault(d => d.CodeAlias == nextDayId), time.Date);
+        return (days.FirstOrDefault(d => d.CodeAlias == nextDayId), date);
     }
 }

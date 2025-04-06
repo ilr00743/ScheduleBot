@@ -160,11 +160,15 @@ public class UpdateHandler : IUpdateHandler
                 break;
             
             case "\ud83d\udccb Розклад на сьогодні":
-                await SendScheduleForToday(botClient, update, session, cancellationToken);
+                // await SendScheduleForToday(botClient, update, session, cancellationToken);
+                var currentDay = await GetCurrentDay();
+                await SendScheduleForDay(botClient, currentDay, update, cancellationToken);
                 break;
             
             case "\ud83d\udccb Розклад на наступний день":
-                await SendScheduleForTomorrow(botClient, update, session, cancellationToken);
+                // await SendScheduleForTomorrow(botClient, update, session, cancellationToken);
+                var nextDay = await GetNextDay();
+                await SendScheduleForDay(botClient, nextDay, update, cancellationToken);
                 break;            
             
             case "\u26a0\ufe0f Зміни на наступний день":
@@ -286,59 +290,21 @@ public class UpdateHandler : IUpdateHandler
         return Task.CompletedTask;
     }
 
-    //TODO: refactor SendScheduleFor* methods by adding WeekDay parameter that removes duplicates
-    private async Task SendScheduleForToday(ITelegramBotClient botClient, Update update, UserSession session, CancellationToken cancellationToken)
+    private async Task SendScheduleForDay(ITelegramBotClient botClient, WeekDay day, Update update, CancellationToken cancellationToken)
     {
         var user = await _userApiClient.GetUserByTelegramIdAsync(update.Message.From.Id.ToString());
-        var currentDay = await GetCurrentDay();
-        
-        var lessons = await _lessonApiClient.GetLessons(groupId: user.GroupId, teacherId: user.TeacherId, dayId: currentDay.Id);
-        
-        if (lessons == null)
-        {
-            await botClient.SendMessage(update.Message.Chat.Id, text: "Занять не знайдено.", cancellationToken: cancellationToken);
-            
-            session.State = UserSessionState.None;
-            return;
-        }
-
-        lessons.Sort((lesson1, lesson2) => lesson1.Number.CompareTo(lesson2.Number));
-
-        var constructedSchedule = new StringBuilder();
-
-        constructedSchedule.Append($"<b>{currentDay.Name}</b>\n");
-        
-        var sortedLessons = lessons.OrderBy(l => l.Number);
-        
-        foreach (var lesson in sortedLessons)
-        {
-            constructedSchedule.Append($"{lesson.Number}. {lesson.Discipline.Name} \u27a1\ufe0f {lesson.Teacher.FullName} \u27a1\ufe0f {lesson.Group.Number} група \u27a1\ufe0f ауд. {lesson.Auditorium.Number}\n");
-        }
-
-        await botClient.SendMessage(chatId: update.Message.Chat.Id, text: constructedSchedule.ToString(), cancellationToken: cancellationToken, parseMode: ParseMode.Html);
-        
-        session.State = UserSessionState.None;
-    }
-    
-    private async Task SendScheduleForTomorrow(ITelegramBotClient botClient, Update update, UserSession session, CancellationToken cancellationToken)
-    {
-        var user = await _userApiClient.GetUserByTelegramIdAsync(update.Message.From.Id.ToString());
-        var day = await GetNextDay();
-        
         var lessons = await _lessonApiClient.GetLessons(groupId: user.GroupId, teacherId: user.TeacherId, dayId: day.Id);
-        
+
         if (lessons == null)
         {
             await botClient.SendMessage(update.Message.Chat.Id, text: "Занять не знайдено.", cancellationToken: cancellationToken);
-            
-            session.State = UserSessionState.None;
             return;
         }
-
+        
         lessons.Sort((lesson1, lesson2) => lesson1.Number.CompareTo(lesson2.Number));
 
         var constructedSchedule = new StringBuilder();
-
+        
         constructedSchedule.Append($"<b>{day.Name}</b>\n");
         
         var sortedLessons = lessons.OrderBy(l => l.Number);
@@ -349,10 +315,8 @@ public class UpdateHandler : IUpdateHandler
         }
 
         await botClient.SendMessage(chatId: update.Message.Chat.Id, text: constructedSchedule.ToString(), cancellationToken: cancellationToken, parseMode: ParseMode.Html);
-        
-        session.State = UserSessionState.None;
     }
-
+    
     private async Task<WeekDay> GetCurrentDay()
     {
         var days = await _dayApiClient.GetDays();

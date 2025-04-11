@@ -43,7 +43,7 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Teacher>()
-            .HasOne<Department>()
+            .HasOne(t => t.Department)
             .WithMany(d => d.Teachers)
             .HasForeignKey(t => t.DepartmentId)
             .OnDelete(DeleteBehavior.SetNull);

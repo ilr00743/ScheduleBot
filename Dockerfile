@@ -1,7 +1,6 @@
-ARG DOTNET_OS_VERSION="-alpine"
-ARG DOTNET_SDK_VERSION=9.0
+ARG DOTNET_SDK_VERSION=8.0
 
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_SDK_VERSION}${DOTNET_OS_VERSION} AS build
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_SDK_VERSION} AS build
 WORKDIR /src
 
 COPY . .

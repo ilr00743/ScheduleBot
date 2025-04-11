@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Core.Entities;
 
 public class Course
 {
+    [Key]
     public int Id { get; set; }
     public required int Number { get; set; }
 

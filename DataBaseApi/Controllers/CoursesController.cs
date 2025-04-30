@@ -56,7 +56,7 @@ public class CoursesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Course>> CreateCourse([FromBody] Course course)
+    public async Task<IActionResult> CreateCourse([FromBody] Course course)
     {
         if (await _context.Courses.AnyAsync(c => c.Number == course.Number))
         {

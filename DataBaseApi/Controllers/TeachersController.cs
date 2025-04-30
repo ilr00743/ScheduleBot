@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataBaseApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/teachers")]
 public class TeachersController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -65,8 +65,12 @@ public class TeachersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Teacher>> CreateTeacher([FromBody] Teacher teacher)
+    public async Task<IActionResult> CreateTeacher([FromBody]Teacher teacher)
     {
+        if (await _context.Teachers.AnyAsync(t => t.Id == teacher.Id))
+        {
+            return Conflict("Teacher already exists");
+        }
         _context.Teachers.Add(teacher);
         
         await _context.SaveChangesAsync();

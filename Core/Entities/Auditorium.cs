@@ -4,7 +4,7 @@ namespace Core.Entities;
 
 public class Auditorium
 {
-    [Key]
+    [Key, Editable(false), Display(AutoGenerateField = false)]
     public int Id { get; set; }
     public int Number { get; set; }
 

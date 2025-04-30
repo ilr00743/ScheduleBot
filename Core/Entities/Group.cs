@@ -6,7 +6,7 @@ namespace Core.Entities;
 
 public class Group
 {
-    [Key]
+    [Key, Editable(false), Display(AutoGenerateField = false)]
     public required int Id { get; set; }
     public required int Number { get; set; }
     

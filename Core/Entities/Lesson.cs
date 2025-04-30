@@ -5,7 +5,7 @@ namespace Core.Entities;
 
 public class Lesson
 {
-    [Key]
+    [Key, Editable(false), Display(AutoGenerateField = false)]
     public int Id { get; set; }
     public int Number { get; set; }
     

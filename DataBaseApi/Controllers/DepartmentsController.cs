@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataBaseApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/departments")]
 public class DepartmentsController : ControllerBase
 {
     private readonly AppDbContext _context;

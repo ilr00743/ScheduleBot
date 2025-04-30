@@ -5,7 +5,7 @@ namespace Core.Entities;
 
 public class User
 {
-    [Key]
+    [Key, Editable(false), Display(AutoGenerateField = false)]
     public int Id { get; set; }
     public required string TelegramId { get; set; }
     public required string UserName { get; set; }

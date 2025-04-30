@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataBaseApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auditoriums")]
 public class AuditoriumsController : ControllerBase
 {
     private readonly AppDbContext _context;

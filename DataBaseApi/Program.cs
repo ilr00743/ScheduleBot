@@ -1,5 +1,8 @@
+using System.Diagnostics;
 using System.Security.Claims;
+using Core.Entities;
 using DataBaseApi.Persistence;
+using DotNetEd.CoreAdmin;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? throw new InvalidOperationException("CONNECTION_STRING environment variable is not set.");
+
+Console.WriteLine($"Connection string: {connectionString}");
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(connectionString));
@@ -22,7 +27,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddAuthorization();
 
-builder.Services.AddCoreAdmin("Admin");
+builder.Services.AddCoreAdmin(new CoreAdminOptions
+{
+    RestrictToRoles = ["Admin"],
+    IgnoreEntityTypes = [typeof(WeekDay)]
+});
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();

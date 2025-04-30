@@ -5,8 +5,8 @@ namespace Core.Entities;
 
 public class Teacher
 {
-    [Key]
-    public required int Id { get; set; }
+    [Key, Editable(false), Display(AutoGenerateField = false)]
+    public int Id { get; set; }
     public required string FullName { get; set; }
     
     [Display(AutoGenerateField = false)]

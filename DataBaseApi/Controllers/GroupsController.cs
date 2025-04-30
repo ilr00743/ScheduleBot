@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataBaseApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/groups")]
 public class GroupsController : ControllerBase
 {
     private readonly AppDbContext _context;

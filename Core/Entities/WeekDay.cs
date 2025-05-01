@@ -4,7 +4,7 @@ namespace Core.Entities;
 
 public class WeekDay
 {
-    [Key, Editable(false), Display(AutoGenerateField = false)]
+    [Key, Editable(false)]
     public int Id { get; set; }
     public string Name { get; set; }
 

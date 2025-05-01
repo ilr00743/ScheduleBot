@@ -67,10 +67,6 @@ public class TeachersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTeacher([FromBody]Teacher teacher)
     {
-        if (await _context.Teachers.AnyAsync(t => t.Id == teacher.Id))
-        {
-            return Conflict("Teacher already exists");
-        }
         _context.Teachers.Add(teacher);
         
         await _context.SaveChangesAsync();

@@ -36,7 +36,7 @@ public class DisciplinesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Discipline>> CreateDiscipline([FromBody] Discipline discipline)
+    public async Task<IActionResult> CreateDiscipline([FromBody] Discipline discipline)
     {
         if (await _context.Disciplines.AnyAsync(d => d.Name == discipline.Name))
         {

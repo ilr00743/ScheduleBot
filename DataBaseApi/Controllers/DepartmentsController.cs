@@ -49,7 +49,7 @@ public class DepartmentsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Department>> CreateDepartment([FromBody] Department department)
+    public async Task<IActionResult> CreateDepartment([FromBody] Department department)
     {
         if (await _context.Departments.AnyAsync(d => d.Name == department.Name))
         {

@@ -64,7 +64,7 @@ public class GroupsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Group>> CreateGroup([FromBody] Group group)
+    public async Task<IActionResult> CreateGroup([FromBody] Group group)
     {
         if (await _context.Groups.AnyAsync(g => g.Id == group.Id))
         {

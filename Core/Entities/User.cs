@@ -11,13 +11,11 @@ public class User
     public required string UserName { get; set; }
     public required UserStatus Status { get; set; }
     
-    [Display(AutoGenerateField = false)]
     public int? GroupId { get; set; }
     
     [ForeignKey(nameof(GroupId))]
     public Group? Group { get; set; }
-    
-    [Display(AutoGenerateField = false)]
+
     public int? TeacherId { get; set; }
 
     [ForeignKey(nameof(TeacherId))]

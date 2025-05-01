@@ -70,7 +70,7 @@ public class LessonsController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Lesson>> CreateLesson([FromBody] Lesson lesson)
+    public async Task<IActionResult> CreateLesson([FromBody] Lesson lesson)
     {
         _context.Lessons.Add(lesson);
         await _context.SaveChangesAsync();

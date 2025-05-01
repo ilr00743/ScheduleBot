@@ -50,7 +50,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser([FromBody]User user)
+    public async Task<IActionResult> CreateUser([FromBody]User user)
     {
         if (await _context.Users.AnyAsync(u => u.TelegramId == user.TelegramId))
         {

@@ -36,7 +36,7 @@ public class AuditoriumsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Teacher>> CreateAuditorium([FromBody] Auditorium auditorium)
+    public async Task<IActionResult> CreateAuditorium(Auditorium auditorium)
     {
         if (await _context.Auditoriums.AnyAsync(aud => aud.Number == auditorium.Number))
         {

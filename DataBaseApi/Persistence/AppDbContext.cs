@@ -31,7 +31,7 @@ public class AppDbContext : DbContext
             .HasOne(u => u.Teacher)
             .WithOne()
             .HasForeignKey<User>(u => u.TeacherId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<User>()
             .Property(u => u.Status).HasConversion<string>();
@@ -55,27 +55,27 @@ public class AppDbContext : DbContext
             entity.HasOne(l => l.Discipline)
                 .WithMany()
                 .HasForeignKey(l => l.DisciplineId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
             
             entity.HasOne(l => l.Teacher)
                 .WithMany()
                 .HasForeignKey(l => l.TeacherId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
             
             entity.HasOne(l => l.Group)
                 .WithMany()
                 .HasForeignKey(l => l.GroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
             
             entity.HasOne(l => l.Auditorium)
                 .WithMany()
                 .HasForeignKey(l => l.AuditoriumId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
             
             entity.HasOne(l => l.Day)
                 .WithMany()
                 .HasForeignKey(l => l.DayId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<WeekDay>()

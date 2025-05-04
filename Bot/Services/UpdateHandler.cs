@@ -627,7 +627,7 @@ public class UpdateHandler : IUpdateHandler
         var days = await _dayApiClient.GetDays();
 
         await botClient.SendMessage(chatId: update.Message.Chat.Id, text: "Оберіть день тижня:",
-            replyMarkup: _markupDrawer.DrawCustomMarkup(buttonsPerRow: 3, days), cancellationToken: cancellationToken);
+            replyMarkup: _markupDrawer.DrawCustomMarkup(buttonsPerRow: 3, days?.Take(5).ToList()), cancellationToken: cancellationToken);
     }
 
     private async Task SendScheduleChangesForDay(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)

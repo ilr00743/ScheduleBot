@@ -28,7 +28,7 @@ public class GroupsController : ControllerBase
             query = query.Where(g => g.Course.Id == courseId.Value);
         }
         
-        var groups = await query.ToListAsync();
+        var groups = await query.OrderBy(g => g.Number).ToListAsync();
         
         if (groups.Count == 0)
         {

@@ -17,7 +17,7 @@ public class LessonsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Lesson>> GetLessons([FromQuery] int? groupId, [FromQuery] int? teacherId, [FromQuery] int? dayId)
+    public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons([FromQuery] int? groupId, [FromQuery] int? teacherId, [FromQuery] int? dayId)
     {
         var query = _context.Lessons
             .Include(l => l.Group)
@@ -79,28 +79,23 @@ public class LessonsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLesson(int id, [FromBody] Lesson lesson)
+    public async Task<IActionResult> UpdateLesson(int id, [FromBody] Lesson updatedLesson)
     {
-        if (id != lesson.Id)
+        var lesson = await _context.Lessons.FirstOrDefaultAsync(l => l.Id == id);
+
+        if (lesson == null)
         {
-            return BadRequest();
+            return NotFound();
         }
         
-        _context.Entry(lesson).State = EntityState.Modified;
-
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!_context.Lessons.Any(l => l.Id == id))
-            {
-                return NotFound();
-            }
-
-            throw;
-        }
+        lesson.Number = updatedLesson.Number;
+        lesson.DisciplineId = updatedLesson.DisciplineId;
+        lesson.TeacherId = updatedLesson.TeacherId;
+        lesson.GroupId = updatedLesson.GroupId;
+        lesson.AuditoriumId = updatedLesson.AuditoriumId;
+        lesson.DayId = updatedLesson.DayId;
+        
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }

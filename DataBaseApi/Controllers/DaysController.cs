@@ -19,7 +19,7 @@ public class DaysController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<WeekDay>>> GetDays()
     {
-        var days = await _context.Days.ToListAsync();
+        var days = await _context.Days.OrderBy(d => d.Id).ToListAsync();
 
         if (days.Count == 0)
         {

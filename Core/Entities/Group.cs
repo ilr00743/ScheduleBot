@@ -12,6 +12,7 @@ public class Group
     
     public int? CourseId { get; set; }
     
+    [JsonIgnore]
     [ForeignKey(nameof(CourseId))]
     public Course? Course { get; set; }
 

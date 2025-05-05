@@ -8,7 +8,7 @@ public class Teacher
 {
     [Key, Editable(false), Display(AutoGenerateField = false)]
     public int Id { get; set; }
-    public required string FullName { get; set; }
+    public string FullName { get; set; }
     
     public int? DepartmentId { get; set; }
 

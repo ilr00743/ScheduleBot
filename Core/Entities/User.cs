@@ -7,9 +7,9 @@ public class User
 {
     [Key, Editable(false), Display(AutoGenerateField = false)]
     public int Id { get; set; }
-    public required string TelegramId { get; set; }
-    public required string UserName { get; set; }
-    public required UserStatus Status { get; set; }
+    public string TelegramId { get; set; }
+    public string UserName { get; set; }
+    public UserStatus Status { get; set; }
     
     public int? GroupId { get; set; }
     

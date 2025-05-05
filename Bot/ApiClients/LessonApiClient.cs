@@ -35,8 +35,6 @@ public class LessonApiClient
         string query = queryParams.Count > 0 ? "?" + string.Join("&", queryParams) : string.Empty;
 
         var response = await _httpClient.GetAsync($"api/lessons{query}");
-        
-        Console.WriteLine($"[LessonApiClient.GetLessons] Full path: api/lessons{query}");
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {

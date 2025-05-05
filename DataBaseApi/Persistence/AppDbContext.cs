@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Auditorium> Auditoriums { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
+    public DbSet<LessonChange> LessonsChanges { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<WeekDay> Days { get; set; }
 
@@ -75,6 +76,37 @@ public class AppDbContext : DbContext
             entity.HasOne(l => l.Day)
                 .WithMany()
                 .HasForeignKey(l => l.DayId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+        
+        modelBuilder.Entity<LessonChange>(entity =>
+        {
+            entity.HasKey(lc => lc.Id);
+
+            entity.Property(lc => lc.Date)
+                .HasColumnType("date");
+
+            entity.Property(lc => lc.ChangeType)
+                .HasConversion<string>();
+
+            entity.HasOne(lc => lc.Group)
+                .WithMany()
+                .HasForeignKey(lc => lc.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(lc => lc.Discipline)
+                .WithMany()
+                .HasForeignKey(lc => lc.DisciplineId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(lc => lc.Teacher)
+                .WithMany()
+                .HasForeignKey(lc => lc.TeacherId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(lc => lc.Auditorium)
+                .WithMany()
+                .HasForeignKey(lc => lc.AuditoriumId)
                 .OnDelete(DeleteBehavior.SetNull);
         });
 

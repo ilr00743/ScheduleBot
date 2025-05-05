@@ -33,13 +33,9 @@ var builder = Host.CreateDefaultBuilder()
         services.AddHttpClient<GroupApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
         services.AddHttpClient<DepartmentApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
         services.AddHttpClient<TeacherApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-        services.AddHttpClient<DayApiClient>(client =>
-            client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ??
-                                         throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-        services.AddHttpClient<LessonApiClient>(client =>
-            client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ??
-                                         throw new ArgumentNullException("ApiKey URL is missing in configuration")));
-
+        services.AddHttpClient<DayApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<LessonApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
+        services.AddHttpClient<LessonChangesApiClient>(client => client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("API_BASE_URL") ?? throw new ArgumentNullException("ApiKey URL is missing in configuration")));
     });
 
 var host = builder.Build();

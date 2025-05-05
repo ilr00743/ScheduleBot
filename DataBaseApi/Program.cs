@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? throw new InvalidOperationException("CONNECTION_STRING environment variable is not set.");
+var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING") ?? "Host=ep-orange-term-a26shjgf-pooler.eu-central-1.aws.neon.tech;Database=bot-db;Username=bot-db_owner;Password=npg_DtvB8pqz0ArY";
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(connectionString));

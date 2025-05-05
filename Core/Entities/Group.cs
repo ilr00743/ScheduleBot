@@ -7,8 +7,8 @@ namespace Core.Entities;
 public class Group
 {
     [Key, Editable(false), Display(AutoGenerateField = false)]
-    public required int Id { get; set; }
-    public required int Number { get; set; }
+    public int Id { get; set; }
+    public int Number { get; set; }
     
     public int? CourseId { get; set; }
     

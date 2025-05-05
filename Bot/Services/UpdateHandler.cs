@@ -166,13 +166,13 @@ public class UpdateHandler : IUpdateHandler
             case "\ud83d\udccb Розклад на сьогодні":
                 var currentDay = await GetCurrentDay();
                 
-                await SendSchedule(botClient, currentDay.Item1, update, cancellationToken, session, user.Group?.Id, user.Teacher?.Id);;
+                await SendSchedule(botClient, currentDay.Item1, update, cancellationToken, session, user.GroupId, user.TeacherId);;
                 break;
             
             case "\ud83d\udccb Розклад на наступний день":
                 var nextDay = await GetNextDay();
                 
-                await SendSchedule(botClient, nextDay.Item1, update, cancellationToken, session, user.Group?.Id, user.Teacher?.Id);
+                await SendSchedule(botClient, nextDay.Item1, update, cancellationToken, session, user.GroupId, user.TeacherId);
                 break;            
             
             case "\u26a0\ufe0f Зміни на наступний день":
@@ -576,7 +576,7 @@ public class UpdateHandler : IUpdateHandler
         
         var day = await _dayApiClient.GetDayByName(update.Message.Text);
         
-        await SendSchedule(botClient, day, update, cancellationToken,session);
+        await SendSchedule(botClient, day, update, cancellationToken, session, user.GroupId, user.TeacherId);
         
         await Task.Delay(TimeSpan.FromSeconds(0.3), cancellationToken);
         

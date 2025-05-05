@@ -17,7 +17,7 @@ public class LessonsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons([FromQuery] int? groupId, [FromQuery] int? teacherId, [FromQuery] int? dayId)
+    public async Task<ActionResult<IEnumerable<Lesson>>> GetLessons([FromQuery] int? groupId = null, [FromQuery] int? teacherId = null, [FromQuery] int? dayId = null)
     {
         var query = _context.Lessons
             .Include(l => l.Group)

@@ -44,6 +44,56 @@ public class UpdateHandler : IUpdateHandler
         _lessonApiClient = lessonApiClient;
         _lessonChangesApiClient = lessonChangesApiClient;
     }
+
+    public async Task HandleSpecialCommandsAsync(ITelegramBotClient botClient, Update update,
+        User user, UserSession session, CancellationToken cancellationToken)
+    {
+        switch (update.Message.Text)
+        {
+            case "/start":
+            {
+                session.State = UserSessionState.None;
+
+                _sessionService.RemoveSession(user.TelegramId);
+
+                session = _sessionService.GetSession(user.TelegramId);
+
+                if (user != null && user.Status != UserStatus.None)
+                {
+                    await botClient.SendMessage(update.Message.Chat.Id,
+                        text: "Ви є в базі даних, можете продовжувати користуватися ботом",
+                        replyMarkup: _markupDrawer.DrawMainMenu(), cancellationToken: cancellationToken);
+                
+                    return;
+                }
+
+                if (user == null)
+                {
+                    await _userApiClient.CreateUserAsync(new User
+                    {
+                        TelegramId = update.Message.From.Id.ToString(),
+                        UserName = update.Message.From.Username ??
+                                   update.Message.From.FirstName + " " + update.Message.From.LastName,
+                        Status = UserStatus.None
+                    });
+                }
+            
+                session.State = UserSessionState.ChoosingStatusForRegistration;
+                await SendStatusSettings(botClient, update);
+                break;
+            }
+            
+            case "/reload":
+                session.State = UserSessionState.None;
+
+                _sessionService.RemoveSession(user.TelegramId);
+                
+                await botClient.SendMessage(update.Message.Chat.Id, text: "Перезавантаження бота.", cancellationToken: cancellationToken);
+                
+                await botClient.SendMessage(update.Message.Chat.Id, text:"Повертаємося до головного меню.", replyMarkup:_markupDrawer.DrawMainMenu(), cancellationToken: cancellationToken);
+                return;
+        }
+    }
     
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
@@ -56,6 +106,9 @@ public class UpdateHandler : IUpdateHandler
         
         var userId = update.Message.From.Id;
         var session = _sessionService.GetSession(userId.ToString());
+        var user = await _userApiClient.GetUserByTelegramIdAsync($"{userId}");
+
+        await HandleSpecialCommandsAsync(botClient, update, user, session, cancellationToken);
         
         switch (session.State)
         {
@@ -115,39 +168,6 @@ public class UpdateHandler : IUpdateHandler
 
         switch (update.Message.Text)
         {
-            case "/start":
-            {
-                session.State = UserSessionState.None;
-
-                _sessionService.RemoveSession(update.Message.From.Id.ToString());
-                
-                session = _sessionService.GetSession(update.Message.From.Id.ToString());
-
-                if (user != null && user.Status != UserStatus.None)
-                {
-                    await botClient.SendMessage(update.Message.Chat.Id,
-                        text: "Ви є в базі даних, можете продовжувати користуватися ботом",
-                        replyMarkup: _markupDrawer.DrawMainMenu(), cancellationToken: cancellationToken);
-                
-                    return;
-                }
-
-                if (user == null)
-                {
-                    await _userApiClient.CreateUserAsync(new User
-                    {
-                        TelegramId = update.Message.From.Id.ToString(),
-                        UserName = update.Message.From.Username ??
-                                   update.Message.From.FirstName + " " + update.Message.From.LastName,
-                        Status = UserStatus.None
-                    });
-                }
-            
-                session.State = UserSessionState.ChoosingStatusForRegistration;
-                await SendStatusSettings(botClient, update);
-                break;
-            }
-            
             case "\ud83d\udcc5 Пошук за днем тижня":
                 session.State = UserSessionState.ChoosingDay;
                 await SendAllDays(botClient, update, cancellationToken);
@@ -185,6 +205,13 @@ public class UpdateHandler : IUpdateHandler
                 var nextDayForChanges = await GetCurrentDay();
                 
                 await SendScheduleChangesForDay(botClient, update, nextDayForChanges.Item2, nextDayForChanges.Item1, cancellationToken);
+                break;
+            
+            case "\u2139\ufe0f Довідка":
+                var text = "У разі виникнення питань, <a href=\"https://t.me/illia_ryzhiy\">пишіть сюди</a>.\n" +
+                           "При несправностях можна спробувати виконати команду /reload";
+
+                await botClient.SendMessage(chatId: update.Message.Chat.Id, text: text, parseMode: ParseMode.Html, cancellationToken: cancellationToken);
                 break;
         }
     }
@@ -264,7 +291,7 @@ public class UpdateHandler : IUpdateHandler
         
         if (department == null)
         {
-            await botClient.SendMessage(update.Message.Chat.Id, "Будь ласка, оберіть відділення зі списку.", cancellationToken: cancellationToken);
+            await botClient.SendMessage(update.Message.Chat.Id, "Будь ласка, оберіть кафедру зі списку.", cancellationToken: cancellationToken);
             return;
         }
         
@@ -398,7 +425,7 @@ public class UpdateHandler : IUpdateHandler
     {
         var departments = await _departmentApiClient.GetDepartmentsAsync();
         
-        await botClient.SendMessage(chatId: update.Message.Chat.Id, text: "Оберіть відділення:",
+        await botClient.SendMessage(chatId: update.Message.Chat.Id, text: "Оберіть кафедру:",
             replyMarkup: _markupDrawer.DrawCustomMarkup(buttonsPerRow: 3, departments, hasMainMenuButton: hasMainMenuButton));
     }
 
@@ -444,7 +471,7 @@ public class UpdateHandler : IUpdateHandler
         
         if (department == null)
         {
-            await botClient.SendMessage(update.Message.Chat.Id, text: "Оберіть відділення зі списку.", cancellationToken: cancellationToken);
+            await botClient.SendMessage(update.Message.Chat.Id, text: "Оберіть кафедру зі списку.", cancellationToken: cancellationToken);
             return;
         }
         

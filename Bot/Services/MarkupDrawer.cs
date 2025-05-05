@@ -10,7 +10,8 @@ public class MarkupDrawer
         {
             new KeyboardButton[] { new("\ud83d\udccb Розклад на сьогодні"), new("\ud83d\udccb Розклад на наступний день") },
             new KeyboardButton[] { new("\u26a0\ufe0f Зміни на сьогодні"), new("\u26a0\ufe0f Зміни на наступний день") },
-            new KeyboardButton[] { new("#\ufe0f\u20e3 Пошук за групою"), new("\ud83e\uddd1\u200d\ud83c\udfeb Пошук за викладачем"), new("\ud83d\udcc5 Пошук за днем тижня") }
+            new KeyboardButton[] { new("#\ufe0f\u20e3 Пошук за групою"), new("\ud83e\uddd1\u200d\ud83c\udfeb Пошук за викладачем"), new("\ud83d\udcc5 Пошук за днем тижня") },
+            new KeyboardButton[] {new("\u2139\ufe0f Довідка")}
         });
     
         mainMenu.ResizeKeyboard = true;

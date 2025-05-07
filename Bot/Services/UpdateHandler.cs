@@ -666,7 +666,7 @@ public class UpdateHandler : IUpdateHandler
                 continue;
             }
             
-            constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Group.Number} \u27a1\ufe0f {lesson.Discipline.Name} \u27a1\ufe0f {lesson.Teacher.FullName} \u27a1\ufe0f ауд. {lesson.Auditorium.Number}\n");
+            constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Group.Number} група \u27a1\ufe0f {lesson.Discipline.Name} \u27a1\ufe0f {lesson.Teacher.FullName} \u27a1\ufe0f ауд. {lesson.Auditorium.Number}\n");
         }
 
         await botClient.SendMessage(chatId: update.Message.Chat.Id, text: constructedSchedule.ToString(), cancellationToken: cancellationToken, parseMode: ParseMode.Html);

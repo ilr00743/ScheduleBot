@@ -92,7 +92,7 @@ public class AppDbContext : DbContext
             entity.HasOne(lc => lc.Group)
                 .WithMany()
                 .HasForeignKey(lc => lc.GroupId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(lc => lc.Discipline)
                 .WithMany()

@@ -52,13 +52,7 @@ public class UpdateHandler : IUpdateHandler
         {
             case "/start":
             {
-                session.State = UserSessionState.None;
-
-                _sessionService.RemoveSession(user.TelegramId);
-
-                session = _sessionService.GetSession(user.TelegramId);
-
-                if (user != null && user.Status != UserStatus.None)
+                if (user != null && (user.GroupId != null || user.TeacherId != null))
                 {
                     await botClient.SendMessage(update.Message.Chat.Id,
                         text: "Ви є в базі даних, можете продовжувати користуватися ботом",
@@ -92,6 +86,11 @@ public class UpdateHandler : IUpdateHandler
                 
                 await botClient.SendMessage(update.Message.Chat.Id, text:"Повертаємося до головного меню.", replyMarkup:_markupDrawer.DrawMainMenu(), cancellationToken: cancellationToken);
                 return;
+            
+            case "/change":
+                session.State = UserSessionState.ChoosingStatusForRegistration;
+                await SendStatusSettings(botClient, update);
+                break;
         }
     }
     
@@ -209,7 +208,8 @@ public class UpdateHandler : IUpdateHandler
             
             case "\u2139\ufe0f Довідка":
                 var text = "У разі виникнення питань, <a href=\"https://t.me/illia_ryzhiy\">пишіть сюди</a>.\n" +
-                           "При несправностях можна спробувати виконати команду /reload";
+                           "При несправностях можна спробувати виконати команду /reload \n" +
+                           "Для зміни реєстраційних даних введіть команду /change";
 
                 await botClient.SendMessage(chatId: update.Message.Chat.Id, text: text, parseMode: ParseMode.Html, cancellationToken: cancellationToken);
                 break;
@@ -233,6 +233,11 @@ public class UpdateHandler : IUpdateHandler
                 break;
             
             default:
+                if (update.Message.Text == "/change")
+                {
+                    return;
+                }
+                
                 await botClient.SendMessage(update.Message.Chat.Id, "Оберіть статус: Студент або Викладач.", cancellationToken: cancellationToken);
                 break;
         }

@@ -89,6 +89,20 @@ public class UpdateHandler : IUpdateHandler
             
             case "/change":
                 session.State = UserSessionState.ChoosingStatusForRegistration;
+                
+                if (user != null)
+                {
+                    await _userApiClient.DeleteUserByIdAsync(user.Id);
+                    
+                    await _userApiClient.CreateUserAsync(new User
+                    {
+                        TelegramId = update.Message.From.Id.ToString(),
+                        UserName = update.Message.From.Username ??
+                                   update.Message.From.FirstName + " " + update.Message.From.LastName,
+                        Status = UserStatus.None
+                    });
+                }
+                
                 await SendStatusSettings(botClient, update);
                 break;
         }

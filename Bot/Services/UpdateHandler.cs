@@ -642,8 +642,7 @@ public class UpdateHandler : IUpdateHandler
 
     private async Task SendScheduleChangesForDay(ITelegramBotClient botClient, Update update, DateOnly date, WeekDay dayName,CancellationToken cancellationToken)
     {
-        var user = await _userApiClient.GetUserByTelegramIdAsync(update.Message.From.Id.ToString());
-        var lessonChanges = await _lessonChangesApiClient.GetChanges(groupId: user.GroupId, teacherId: user.TeacherId, date: date);
+        var lessonChanges = await _lessonChangesApiClient.GetChanges(date: date);
 
         if (lessonChanges == null)
         {
@@ -663,18 +662,11 @@ public class UpdateHandler : IUpdateHandler
         {
             if (lesson.ChangeType == ChangeType.Cancelled)
             {
-                constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f скасована\n");
+                constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Group.Number} \u27a1\ufe0f скасована\n");
                 continue;
             }
-
-            if (user.Status == UserStatus.Student)
-            {
-                constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Discipline.Name} \u27a1\ufe0f {lesson.Teacher.FullName} \u27a1\ufe0f ауд. {lesson.Auditorium.Number}\n");
-            }
-            else
-            {
-                constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Discipline.Name} \u27a1\ufe0f {lesson.Group.Number} група \u27a1\ufe0f ауд. {lesson.Auditorium.Number}\n");
-            }
+            
+            constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Group.Number} \u27a1\ufe0f {lesson.Discipline.Name} \u27a1\ufe0f {lesson.Teacher.FullName} \u27a1\ufe0f ауд. {lesson.Auditorium.Number}\n");
         }
 
         await botClient.SendMessage(chatId: update.Message.Chat.Id, text: constructedSchedule.ToString(), cancellationToken: cancellationToken, parseMode: ParseMode.Html);

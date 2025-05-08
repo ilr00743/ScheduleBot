@@ -662,7 +662,7 @@ public class UpdateHandler : IUpdateHandler
         {
             if (lesson.ChangeType == ChangeType.Cancelled)
             {
-                constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Group.Number} \u27a1\ufe0f скасована\n");
+                constructedSchedule.Append($"{lesson.Number} пара \u27a1\ufe0f {lesson.Group.Number} група \u27a1\ufe0f скасована\n");
                 continue;
             }
             

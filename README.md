@@ -2,7 +2,7 @@
 
 A Telegram bot application for managing and providing access to academic schedules. The project consists of a Telegram bot client and a REST API backend with database management capabilities.
 
-## 🏗️ Project Structure
+## Project Structure
 
 The solution is organized into three main projects:
 
@@ -10,7 +10,7 @@ The solution is organized into three main projects:
 - **DataBaseApi** - REST API backend with database management and admin interface
 - **Core** - Shared entities and DTOs used across the application
 
-## 🚀 Features
+## Features
 
 ### Telegram Bot
 - User session management
@@ -32,7 +32,7 @@ The solution is organized into three main projects:
 - Teachers, Disciplines, Auditoriums
 - Lessons, LessonChanges, WeekDays
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **.NET 8** - Main framework
 - **Telegram.Bot** - Telegram bot API client
@@ -41,14 +41,14 @@ The solution is organized into three main projects:
 - **CoreAdmin** - Database administration interface
 - **Fly.io** - Cloud deployment platform
 
-## 📋 Prerequisites
+## Prerequisites
 
 - .NET 8 SDK
 - PostgreSQL database
 - Telegram Bot Token (from @BotFather)
 - Fly.io account (for deployment)
 
-## 🔧 Environment Variables
+## Environment Variables
 
 ### Bot Application
 ```bash
@@ -63,7 +63,7 @@ ADMIN_USERNAME=admin_username
 ADMIN_PASSWORD=admin_password
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Local Development
 
@@ -101,7 +101,7 @@ The project includes Docker support for containerized deployment:
 docker-compose up --build
 ```
 
-## 🌐 API Endpoints
+## API Endpoints
 
 The DataBaseApi provides REST endpoints for:
 
@@ -119,7 +119,7 @@ The DataBaseApi provides REST endpoints for:
 ### Swagger Documentation
 Access the API documentation at `/swagger` when running in development mode.
 
-## 🔐 Admin Interface
+## Admin Interface
 
 The application includes a CoreAdmin interface for database management:
 
@@ -128,7 +128,7 @@ The application includes a CoreAdmin interface for database management:
 - Manage all entities through a web interface
 - Configure admin credentials via environment variables
 
-## 🚀 Deployment
+## Deployment
 
 ### Fly.io Deployment
 
@@ -160,7 +160,7 @@ The project is configured for deployment on Fly.io:
    fly secrets set API_BASE_URL="https://your-api-domain.com"
    ```
 
-## 📁 Project Structure Details
+## Project Structure Details
 
 ```
 PIBScheduleBot/
@@ -181,7 +181,7 @@ PIBScheduleBot/
 └── PIBScheduleBot.sln    # Solution file
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -189,19 +189,13 @@ PIBScheduleBot/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
 For support and questions:
 - Create an issue in the repository
 - Contact the development team
 - Check the API documentation at `/swagger`
-
-## 🔄 Version History
-
-- **v1.0.0** - Initial release with basic schedule functionality
-- **v1.1.0** - Added lesson changes and improved user interface
-- **v1.2.0** - Enhanced admin interface and API documentation 
